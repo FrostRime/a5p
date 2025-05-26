@@ -20,14 +20,14 @@ on:
 
 jobs:
   ace5pro_no_kpm:
-    uses: ./.github/workflows/a5p.yml
+    uses: ./.github/workflows/build.yml
     secrets: inherit
     with:
       KERNEL_NAME: ${{ github.event.inputs.kernel_name || '-android15-8-g013ec21bba94-abogki383916444' }}
       local_version: ${{ github.event.inputs.local_version || '-4k' }}
 
   getsukisumanager:
-    uses: ./.github/workflows/Manager.yml
+    uses: ./.github/workflows/manager.yml
     with:
       kernelsu_variant: 'SukiSU'
     secrets: inherit
