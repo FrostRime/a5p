@@ -1,0 +1,36 @@
+name: Build All(主工作流)
+
+on:
+  workflow_dispatch:
+    inputs:
+      kernel_name:
+        description: "如果留空则使用默认内核名"
+        required: false
+        default: '-android15-8-g013ec21bba94-abogki383916444'
+        type: string
+      local_version:
+        description: '是否修改内核后缀名？ (默认"-4k")'
+        required: false
+        default: '-4k'
+        type: string
+      GetSukiSUManager:
+        description: "拉取最新管理器"
+        type: boolean
+        default: false
+
+jobs:
+  ace5pro_no_kpm:
+    uses: ./.github/workflows/a5p.yml
+    secrets: inherit
+    with:
+      KERNEL_NAME: ${{ github.event.inputs.kernel_name || '-android15-8-g013ec21bba94-abogki383916444' }}
+      local_version: ${{ github.event.inputs.local_version || '-4k' }}
+
+  getsukisumanager:
+    uses: ./.github/workflows/Manager.yml
+    with:
+      kernelsu_variant: 'SukiSU'
+    secrets: inherit
+    permissions:
+      contents: write
+      actions: read
