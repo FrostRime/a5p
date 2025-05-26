@@ -232,7 +232,7 @@ jobs:
       - name: Build kernel
         run: |
          cd kernel_workspace/kernel_platform
-         tools/bazel run --config=fast --config=stamp  --lto=thin  --copt=-O3 --copt=-flto=thin --copt=-march=armv9.2-a+oryon --copt=+sve2 --copt=+dotprod --copt=+crypto --copt=+rcpc3 --copt=+mte --copt=-mtune=oryon --copt=-mcpu=oryon --copt=-DQCOM_ORYON_ARCH --copt=-DUSE_SVE2_INTRINSICS --linkopt=-flto=thin --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
+         tools/bazel run --config=fast --config=stamp  --lto=thin  --copt=-O3 --copt=-flto=thin --copt=-DQCOM_ORYON_ARCH --copt=-DUSE_SVE2_INTRINSICS --linkopt=-flto=thin --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
 
       - name: Generate Kernel lmages
         run: |
