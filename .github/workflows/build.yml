@@ -232,7 +232,7 @@ jobs:
       - name: Build kernel
         run: |
          cd kernel_workspace/kernel_platform
-         tools/bazel run --config=fast --config=stamp  --lto=thin  --copt=-O2 --jobs=64 --compilation_mode=dbg --copt=-ggdb --strip=never --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
+         tools/bazel run --config=fast --config=stamp --lto=thin --copt=-O2 --jobs=$(nproc) --compilation_mode=opt --strip=always --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
 
       - name: Generate Kernel lmages
         run: |
