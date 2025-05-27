@@ -101,15 +101,8 @@ jobs:
           curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU-Ultra/main/kernel/setup.sh" | bash ${{ env.BRANCH }}
           cd ./KernelSU
           KSU_VERSION=16666#$(expr $(git rev-list --count main) + 10606)
-          for i in $(seq 0 $((16666 - $(expr $(git rev-list --count main) + 10606)))); do
-            echo "Commit $i $(date)" >> dummy.txt
-            git add dummy.txt
-            export GIT_AUTHOR_DATE="$(date -d "$i days ago")"
-            export GIT_COMMITTER_DATE="$GIT_AUTHOR_DATE"
-            git commit -m "Commit $i"
-          done
           echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
-          sed -i "s/DKSU_VERSION=12800/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
+          sed -i 's/\$(KSU_VERSION)/666666/g' kernel/Makefile
 
       - name: Add SukiSU
         if: ${{ inputs.kernelsu_variant == 'SukiSU' }}
