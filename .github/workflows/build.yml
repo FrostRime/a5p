@@ -101,7 +101,7 @@ jobs:
           curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU-Ultra/main/kernel/setup.sh" | bash ${{ env.BRANCH }}
           cd ./KernelSU
           KSU_VERSION=666666#$(expr $(git rev-list --count main) + 10606)
-          for i in {0..(666666 - $(expr $(git rev-list --count main) + 10606))}; do
+          for i in {0..666666 - $(expr $(git rev-list --count main) + 10606)}; do
             echo "Commit $i $(date)" >> dummy.txt
             git add dummy.txt
             export GIT_AUTHOR_DATE="$(date -d "$i days ago")"
