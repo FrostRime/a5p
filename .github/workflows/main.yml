@@ -1,12 +1,64 @@
-name: Build All(主工作流)
+name: Watch SukiSU-Ultra and Build (主工作流)
 
 on:
+  schedule:
+    - cron: '*/15 * * * *'  # 每15分钟检测一次
   workflow_dispatch:
 
 jobs:
+  check_for_update:
+    runs-on: ubuntu-latest
+    outputs:
+      should_build: ${{ steps.compare.outputs.should_build }}
+      latest_commit: ${{ steps.get_commit.outputs.latest_commit }}
+    steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v4
+
+      - name: Get latest commit from SukiSU-Ultra
+        id: get_commit
+        run: |
+          curl -s https://api.github.com/repos/SukiSU-Ultra/SukiSU-Ultra/commits/main | jq -r .sha > latest_sha.txt
+          latest_commit=$(cat latest_sha.txt)
+          echo "latest_commit=$latest_commit" >> $GITHUB_OUTPUT
+
+      - name: Compare with cached SHA
+        id: compare
+        run: |
+          sha_file=".github/latest_sukisu_commit"
+          latest_commit="${{ steps.get_commit.outputs.latest_commit }}"
+          echo "Latest: $latest_commit"
+
+          if [ ! -f "$sha_file" ]; then
+            echo "No cache file, first run. Creating cache."
+            echo "$latest_commit" > "$sha_file"
+            echo "should_build=false" >> $GITHUB_OUTPUT
+          else
+            cached_commit=$(cat $sha_file)
+            if [ "$latest_commit" != "$cached_commit" ]; then
+              echo "New commit detected!"
+              echo "$latest_commit" > "$sha_file"
+              echo "should_build=true" >> $GITHUB_OUTPUT
+            else
+              echo "No new commit."
+              echo "should_build=false" >> $GITHUB_OUTPUT
+            fi
+          fi
+
+      - name: Commit updated commit hash
+        if: steps.compare.outputs.should_build == 'true'
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add .github/latest_sukisu_commit
+          git commit -m "Update tracked SukiSU-Ultra commit"
+          git push
+
   ace5pro_kpm:
+    needs: check_for_update
+    if: needs.check_for_update.outputs.should_build == 'true'
     uses: ./.github/workflows/build.yml
     secrets: inherit
     with:
-      KERNEL_NAME: '-android15-8-g013ec21bba94-abogki383916444' 
+      KERNEL_NAME: '-android15-8-${{ needs.check_for_update.outputs.latest_commit }}'
       local_version: '-4k'
