@@ -60,5 +60,5 @@ jobs:
     uses: ./.github/workflows/build.yml
     secrets: inherit
     with:
-      KERNEL_NAME: '-android15-8-${{ needs.check_for_update.outputs.latest_commit }}'
+      KERNEL_NAME: '-android15-8-g013ec21bba94-abogki383916444'
       local_version: '-4k'
