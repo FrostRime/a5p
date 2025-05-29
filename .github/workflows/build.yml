@@ -163,6 +163,14 @@ jobs:
          echo "Using local_version: ${{ inputs.local_version }}"
          sed -i "s/CONFIG_LOCALVERSION=\"-4k\"/CONFIG_LOCALVERSION=\"${{ inputs.local_version }}\"/" ./common/arch/arm64/configs/gki_defconfig
 
+      - name: Apply Hide Stuff Patches
+        run: |
+          cd kernel_workspace/kernel_platform/common
+          cp ../../SukiSU_patch/69_hide_stuff.patch ./
+          echo "正在打隐藏应用补丁"
+          patch -p1 -F 3 < 69_hide_stuff.patch
+          echo "隐藏应用_patch完成"
+    
       - name: Add SUSFS Configuration Settings
         run: |
           cd kernel_workspace/kernel_platform
@@ -195,9 +203,6 @@ jobs:
           echo "CONFIG_CRYPTO_LZ4KD=y" >> ./common/arch/arm64/configs/gki_defconfig
           echo "CONFIG_CRYPTO_842=y" >> ./common/arch/arm64/configs/gki_defconfig
           
-          echo "CONFIG_PERF_EVENTS=y" >> ./common/arch/arm64/configs/gki_defconfig
-          echo "CONFIG_HW_PERF_EVENTS=y" >> ./common/arch/arm64/configs/gki_defconfig
-         
           # Remove check_defconfig
           sed -i 's/check_defconfig//' ./common/build.config.gki
           cd common
