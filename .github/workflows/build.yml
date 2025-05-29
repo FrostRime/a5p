@@ -100,7 +100,7 @@ jobs:
           cd kernel_workspace/kernel_platform
           curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU-Ultra/main/kernel/setup.sh" | bash ${{ env.BRANCH }}
           cd ./KernelSU
-          KSU_VERSION=16384#$(expr $(git rev-list --count main) + 10606)#Omax
+          KSU_VERSION=16384#$(expr $(git rev-list --count main) + 10606)#O3with_perf_support
           echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
           sed -i '/ifeq.*\.git/,/endif/c\KSU_VERSION := 16384\nccflags-y += -DKSU_VERSION=$(KSU_VERSION)\n$(info -- [Fixed] KernelSU version: $(KSU_VERSION))' kernel/Makefile
 
@@ -194,6 +194,9 @@ jobs:
           echo "CONFIG_CRYPTO_LZ4K=y" >> ./common/arch/arm64/configs/gki_defconfig
           echo "CONFIG_CRYPTO_LZ4KD=y" >> ./common/arch/arm64/configs/gki_defconfig
           echo "CONFIG_CRYPTO_842=y" >> ./common/arch/arm64/configs/gki_defconfig
+          
+          echo "CONFIG_PERF_EVENTS=y" >> ./common/arch/arm64/configs/gki_defconfig
+          echo "CONFIG_HW_PERF_EVENTS=y" >> ./common/arch/arm64/configs/gki_defconfig
          
           # Remove check_defconfig
           sed -i 's/check_defconfig//' ./common/build.config.gki
