@@ -100,7 +100,7 @@ jobs:
           cd kernel_workspace/kernel_platform
           curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU-Ultra/main/kernel/setup.sh" | bash ${{ env.BRANCH }}
           cd ./KernelSU
-          KSU_VERSION=16384#$(expr $(git rev-list --count main) + 10606)#Os
+          KSU_VERSION=16384#$(expr $(git rev-list --count main) + 10606)#Ofast
           echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
           sed -i '/ifeq.*\.git/,/endif/c\KSU_VERSION := 16384\nccflags-y += -DKSU_VERSION=$(KSU_VERSION)\n$(info -- [Fixed] KernelSU version: $(KSU_VERSION))' kernel/Makefile
 
@@ -232,7 +232,7 @@ jobs:
       - name: Build kernel
         run: |
          cd kernel_workspace/kernel_platform
-         tools/bazel run --config=fast --config=stamp --lto=thin --copt=-Os --jobs=$(nproc) --compilation_mode=opt --strip=always --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
+         tools/bazel run --config=fast --config=stamp --lto=thin --copt=-Ofast --jobs=$(nproc) --compilation_mode=opt --strip=always --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
 
       - name: Generate Kernel lmages
         run: |
