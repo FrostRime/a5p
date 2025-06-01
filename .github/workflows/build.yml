@@ -239,15 +239,7 @@ jobs:
       - name: Build kernel
         run: |
           cd kernel_workspace/kernel_platform
-          tools/bazel build \
-            --config=fast \
-            --config=stamp \
-            --lto=thin \
-            --copt=-O${{ inputs.optimizer_level }} \
-            --jobs=$(nproc) \
-            --compilation_mode=opt \
-            --strip=always \
-            --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
+          tools/bazel build --config=fast --config=stamp --lto=thin --copt=-O${{ inputs.optimizer_level }} --jobs=$(nproc) --compilation_mode=opt --strip=always --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
 
       - name: Generate Kernel lmages
         run: |
