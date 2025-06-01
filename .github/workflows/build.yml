@@ -255,8 +255,7 @@ jobs:
             --compilation_mode=opt \
             --strip=always \
             --linkopt=-fuse-ld=lld \
-            --dist_dir=dist \
-            //common:kernel_aarch64_dist
+            //common:kernel_aarch64_dist --dist_dir=dist
 
       - name: Generate Kernel lmages
         run: |
