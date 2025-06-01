@@ -66,10 +66,16 @@ jobs:
           git config --global user.name "jianqing"
           git config --global user.email "2106456897@qq.com"
 
-      - name: Install dependencies
+#       - name: Install dependencies
+#         run: |
+#           sudo apt update && sudo apt upgrade -y
+#           sudo apt install -y python3 git curl
+
+      - name: Install repo tool
         run: |
-          sudo apt update && sudo apt upgrade -y
-          sudo apt install -y python3 git curl
+          curl https://storage.googleapis.com/git-repo-downloads/repo > ~/repo
+          chmod a+x ~/repo
+          sudo mv ~/repo /usr/local/bin/repo
 
       - name: Initialize repo and sync
         run: |
