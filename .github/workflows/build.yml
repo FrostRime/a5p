@@ -1,4 +1,4 @@
-name: ace5pro_kpm(分工作流)
+name: build(分工作流)
 on:
   workflow_call:
     inputs:
@@ -37,6 +37,9 @@ on:
       local_version:
         required: false
         type: string
+      optimizer_level:
+        required: true
+        type: string
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -44,7 +47,6 @@ jobs:
     strategy:
       matrix:
         FEIL: ["oneplus_ace5_pro", "oneplus_13", "oneplus_13t"]
-        optimizer_level: ["0", "1", "2", "3", "fast"]
 
     steps:
       - name: Maximize build space
@@ -237,7 +239,7 @@ jobs:
       - name: Build kernel
         run: |
           cd kernel_workspace/kernel_platform
-          tools/bazel run --config=fast --config=stamp --lto=thin --copt=-O${{ matrix.optimizer_level }} --jobs=$(nproc) --compilation_mode=opt --strip=always --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
+          tools/bazel run --config=fast --config=stamp --lto=thin --copt=-O${{ inputs.optimizer_level }} --jobs=$(nproc) --compilation_mode=opt --strip=always --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
 
       - name: Generate Kernel lmages
         run: |
@@ -260,5 +262,5 @@ jobs:
       - name: Upload AnyKernel3 (KPM)
         uses: actions/upload-artifact@v4
         with:
-          name: AnyKernel3_${{ matrix.FEIL }}_${{ env.KSUVER }}_O${{ matrix.optimizer_level }}kpm
+          name: AnyKernel3_${{ matrix.FEIL }}_${{ env.KSUVER }}_O${{ inputs.optimizer_level }}kpm
           path: kernel_workspace/kernel_platform/dist/AnyKernel3-kpm/*
