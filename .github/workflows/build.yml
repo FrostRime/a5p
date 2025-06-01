@@ -42,7 +42,7 @@ jobs:
       matrix:
         FEIL: ["oneplus_ace5_pro", "oneplus_13", "oneplus_13t"]
         optimizer_level: [ "0", "1", "2", "s", "3", "fast"]
-      max-parallet: 1
+      max-parallel: 1
 
     steps:
       - name: Maximize build space
