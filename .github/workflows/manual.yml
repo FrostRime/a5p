@@ -6,6 +6,15 @@ on:
       optimizer_level:
         required: true
         type: string
+      options:
+        required: true
+        description: '目标机型'
+        type: choice
+        options:
+          - 'oneplus_ace5_pro'
+          - 'oneplus_13'
+          - 'oneplus_13t'
+        default: 'oneplus_ace5_pro'
 
 jobs:
   build:
@@ -13,3 +22,4 @@ jobs:
     secrets: inherit
     with:
       optimizer_level: ${{ inputs.optimizer_level }}
+      FEIL: ${{ inputs.options }}
