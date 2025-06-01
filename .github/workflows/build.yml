@@ -246,6 +246,7 @@ jobs:
             --noremote_upload_local_results \
             --remote_timeout=10m \
             --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_API_KEY }} \
+            --remote_instance_name=github_actions \
             --config=fast \
             --config=stamp \
             --lto=thin \
@@ -253,7 +254,9 @@ jobs:
             --jobs=$(nproc) \
             --compilation_mode=opt \
             --strip=always \
-            --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
+            --linkopt=-fuse-ld=lld \
+            --dist_dir=dist \
+            //common:kernel_aarch64_dist
 
       - name: Generate Kernel lmages
         run: |
