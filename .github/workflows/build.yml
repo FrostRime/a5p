@@ -41,10 +41,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-  strategy:
-    matrix:
-      FEIL: ["oneplus_ace5_pro", "oneplus_13", "oneplus_13t"]
-      optimizer_level: ["0", "1", "2", "3", "fast"]
+    strategy:
+      matrix:
+        FEIL: ["oneplus_ace5_pro", "oneplus_13", "oneplus_13t"]
+        optimizer_level: ["0", "1", "2", "3", "fast"]
 
     steps:
       - name: Maximize build space
