@@ -2,32 +2,8 @@ name: Build All(主工作流)
 
 on:
   workflow_dispatch:
-    inputs:
-      optimizer_level:
-        required: true
-        description: '编译等级'
-        type: choice
-        options:
-          - '1'
-          - '2'
-          - '3'
-          - 's'
-          - 'fast'
-        default: '3'
-      EFIL:
-        required: true
-        description: '目标机型'
-        type: choice
-        options:
-          - 'oneplus_ace5_pro'
-          - 'oneplus_13'
-          - 'oneplus_13t'
-        default: 'oneplus_ace5_pro'
 
 jobs:
   build:
     uses: ./.github/workflows/build.yml
     secrets: inherit
-    with:
-      optimizer_level: ${{ inputs.optimizer_level }}
-      FEIL: ${{ inputs.EFIL }}
