@@ -8,26 +8,7 @@ on:
         type: string
 
 jobs:
-  init_repo:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cache repo tool
-        id: cache-repo
-        uses: actions/cache@v4
-        with:
-          path: ~/bin/repo
-          key: repo-${{ github.sha }}
-      
-      - name: Install repo
-        if: steps.cache-repo.outputs.cache-hit != 'true'
-        run: |
-          mkdir ~/bin
-          curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-          chmod a+x ~/bin/repo
-      - name: Add repo to path
-        run: echo "$HOME/bin" >> $GITHUB_PATH
-
-  ace5pro_kpm:
+  build:
     uses: ./.github/workflows/build.yml
     secrets: inherit
     with:
