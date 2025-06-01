@@ -2,11 +2,32 @@ name: Build All(主工作流)
 
 on:
   workflow_dispatch:
+    optimizer_level:
+      required: true
+      type: string
 
 jobs:
+  init_repo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache repo tool
+        id: cache-repo
+        uses: actions/cache@v4
+        with:
+          path: ~/bin/repo
+          key: repo-${{ github.sha }}
+      
+      - name: Install repo
+        if: steps.cache-repo.outputs.cache-hit != 'true'
+        run: |
+          mkdir ~/bin
+          curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+          chmod a+x ~/bin/repo
+      - name: Add repo to path
+        run: echo "$HOME/bin" >> $GITHUB_PATH
+
   ace5pro_kpm:
     uses: ./.github/workflows/build.yml
     secrets: inherit
     with:
-      KERNEL_NAME: '-android15-8-g013ec21bba94-abogki383916444' 
-      local_version: '-4k'
+      optimizer_level: ${{ inputs.optimizer_level }}
