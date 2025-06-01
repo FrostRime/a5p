@@ -239,7 +239,21 @@ jobs:
       - name: Build kernel
         run: |
           cd kernel_workspace/kernel_platform
-          tools/bazel run --config=fast --config=stamp --lto=thin --copt=-O${{ inputs.optimizer_level }} --jobs=$(nproc) --compilation_mode=opt --strip=always --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
+          tools/bazel build \
+            --bes_results_url=https://app.buildbuddy.io/invocation/ \
+            --bes_backend=grpcs://remote.buildbuddy.io \
+            --remote_cache=grpcs://remote.buildbuddy.io \
+            --noremote_upload_local_results \
+            --remote_timeout=10m \
+            --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_API_KEY }} \
+            --config=fast \
+            --config=stamp \
+            --lto=thin \
+            --copt=-O${{ inputs.optimizer_level }} \
+            --jobs=$(nproc) \
+            --compilation_mode=opt \
+            --strip=always \
+            --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
 
       - name: Generate Kernel lmages
         run: |
