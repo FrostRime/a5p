@@ -254,8 +254,7 @@ jobs:
             --jobs=$(nproc) \
             --compilation_mode=opt \
             --strip=always \
-            --linkopt=-fuse-ld=lld \
-            //common:kernel_aarch64_dist --dist_dir=dist
+            --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
 
       - name: Generate Kernel lmages
         run: |
