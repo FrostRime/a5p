@@ -18,10 +18,6 @@ on:
         type: string
         required: false
         default: "-android15-8-g013ec21bba94-abogki383916444"
-      kernelsu_variant:
-        type: string
-        required: false
-        default: "SukiSU-Ultra"
       kernelsu_version:
         type: string
         required: false
@@ -38,15 +34,15 @@ on:
         required: false
         type: string
         default: "-4k"
-      optimizer_level:
-        required: true
-        type: string
-      FEIL:
-        required: true
-        type: string
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        FEIL: ["oneplus_ace5_pro", "oneplus_13", "oneplus_13t"]
+        optimizer_level: [ "0", "1", "2", "s", "3", "fast"]
+      max-parallet: 1
 
     steps:
       - name: Maximize build space
@@ -79,7 +75,7 @@ jobs:
       - name: Initialize repo and sync
         run: |
           mkdir kernel_workspace && cd kernel_workspace
-          repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b refs/heads/oneplus/${{ inputs.CPU }} -m ${{ inputs.FEIL }}.xml --depth=1
+          repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b refs/heads/oneplus/${{ inputs.CPU }} -m ${{ matrix.FEIL }}.xml --depth=1
           repo --trace sync -c -j$(nproc --all) --no-tags
           rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
           rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
@@ -94,7 +90,6 @@ jobs:
           fi
 
       - name: Add SukiSU-Ultra
-        if: ${{ inputs.kernelsu_variant == 'SukiSU-Ultra' }}
         run: |
           cd kernel_workspace/kernel_platform
           curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU-Ultra/main/kernel/setup.sh" | bash ${{ env.BRANCH }}
@@ -102,16 +97,6 @@ jobs:
           KSU_VERSION=16384#$(expr $(git rev-list --count main) + 10606)
           echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
           sed -i '/ifeq.*\.git/,/endif/c\KSU_VERSION := 16384\nccflags-y += -DKSU_VERSION=$(KSU_VERSION)\n$(info -- [Fixed] KernelSU version: $(KSU_VERSION))' kernel/Makefile
-
-      - name: Add SukiSU
-        if: ${{ inputs.kernelsu_variant == 'SukiSU' }}
-        run: |
-          cd kernel_workspace/kernel_platform
-          curl -LSs "https://raw.githubusercontent.com/ShirkNeko/KernelSU/main/kernel/setup.sh" | bash ${{ env.BRANCH }}
-          cd ./KernelSU
-          KSU_VERSION=12999#$(expr $(git rev-list --count main) + 10606)
-          echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
-          sed -i "s/DKSU_VERSION=16/DKSU_VERSION=${KSU_VERSION}/" kernel/Makefile
 
       - name: Set up SUSFS & apply patches
         run: |
@@ -243,7 +228,7 @@ jobs:
             --config=fast \
             --config=stamp \
             --lto=thin \
-            --copt=-O${{ inputs.optimizer_level }} \
+            --copt=-O${{ matrix.optimizer_level }} \
             --jobs=$(nproc) \
             --compilation_mode=opt \
             --strip=always \
@@ -270,5 +255,5 @@ jobs:
       - name: Upload AnyKernel3 (KPM)
         uses: actions/upload-artifact@v4
         with:
-          name: AnyKernel3_${{ inputs.FEIL }}_${{ env.KSUVER }}_O${{ inputs.optimizer_level }}kpm
+          name: AnyKernel3_${{ matrix.FEIL }}_${{ env.KSUVER }}_O${{ matrix.optimizer_level }}kpm
           path: kernel_workspace/kernel_platform/dist/AnyKernel3-kpm/*
