@@ -240,13 +240,6 @@ jobs:
         run: |
           cd kernel_workspace/kernel_platform
           tools/bazel build \
-            --bes_results_url=https://app.buildbuddy.io/invocation/ \
-            --bes_backend=grpcs://remote.buildbuddy.io \
-            --remote_cache=grpcs://remote.buildbuddy.io \
-            --noremote_upload_local_results \
-            --remote_timeout=10m \
-            --remote_header=x-buildbuddy-api-key=${{ secrets.BUILDBUDDY_API_KEY }} \
-            --remote_instance_name=github_actions \
             --config=fast \
             --config=stamp \
             --lto=thin \
