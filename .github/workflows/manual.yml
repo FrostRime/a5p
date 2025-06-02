@@ -31,7 +31,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: all-artifacts
-          pattern: AnyKernel3_*
+          pattern: "*"
           merge-multiple: true
 
       - name: Create unified release
@@ -57,8 +57,6 @@ jobs:
           draft: false
           prerelease: false
           files: |
-            all-artifacts/*.zip
-            all-artifacts/*.img
-            all-artifacts/*.bin
+            all-artifacts/*
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
