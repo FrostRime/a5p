@@ -50,8 +50,8 @@ on:
         
 jobs:
   build:
-    runs-on: blacksmith-4vcpu-ubuntu-2404
-
+    runs-on: ubuntu-latest
+    
     steps:
       - name: Maximize build space
         uses: easimon/maximize-build-space@master
