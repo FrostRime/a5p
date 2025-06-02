@@ -7,7 +7,7 @@ on:
 
 jobs:  
   generate-timestamp:
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     outputs:
       timestamp: ${{ steps.set-time.outputs.timestamp }}
     steps:
@@ -32,7 +32,7 @@ jobs:
  # ============== 新增聚合 Release 的作业 ============== #
   create-unified-release:
     needs: [generate-timestamp, build]
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     if: ${{ needs.generate-timestamp.outputs.timestamp != '' }}
     
     steps:
