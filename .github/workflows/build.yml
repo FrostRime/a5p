@@ -59,20 +59,11 @@ jobs:
           root-reserve-mb: 8192
           temp-reserve-mb: 2048
           swap-size-mb: 8192
-          remove-dotnet: 'true'
-          remove-android: 'true'
-          remove-haskell: 'true'
-          remove-codeql: 'true'
-
+          
       - name: Configure Git
         run: |
          git config --global user.name "jianqing"
          git config --global user.email "2106456897@qq.com"
-
-      - name: Install dependencies
-        run: |
-         sudo apt update && sudo apt upgrade -y
-         sudo apt install -y python3 git curl
 
       - name: Install repo tool
         run: |
