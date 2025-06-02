@@ -8,8 +8,7 @@ on:
         default: 'sm8750'
       FEIL:
         type: string
-        required: false
-        default: 'oneplus_ace5_pro'
+        required: true
       CPUD:
         type: string
         required: false
@@ -45,6 +44,10 @@ on:
       local_version:
         required: false
         type: string
+      optimizer-level:
+        required: true
+        type: string
+        
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -100,7 +103,7 @@ jobs:
           cd kernel_workspace/kernel_platform
           curl -LSs "https://raw.githubusercontent.com/ShirkNeko/SukiSU-Ultra/main/kernel/setup.sh" | bash ${{ env.BRANCH }}
           cd ./KernelSU
-          KSU_VERSION=16384#$(expr $(git rev-list --count main) + 10606)#O3with_perf_support
+          KSU_VERSION=16384#$(expr $(git rev-list --count main) + 10606)
           echo "KSUVER=$KSU_VERSION" >> $GITHUB_ENV
           sed -i '/ifeq.*\.git/,/endif/c\KSU_VERSION := 16384\nccflags-y += -DKSU_VERSION=$(KSU_VERSION)\n$(info -- [Fixed] KernelSU version: $(KSU_VERSION))' kernel/Makefile
 
@@ -257,8 +260,8 @@ jobs:
 
       - name: Zip
         run: |
-          cd kernel_workspace/kernel_platform/dist
-          zip -r AnyKernel3_oneplus_ace5pro_${{ env.KSUVER }}_kpm.zip ./AnyKernel3-kpm/*
+          cd kernel_workspace/kernel_platform/dist/AnyKernel3-kpm
+          zip -r ../AnyKernel3_${{inputs.FEIL }}_${{ env.KSUVER }}_kpm.zip ./*
                          
       - name: Upload AnyKernel3 (KPM)
         uses: actions/upload-artifact@v4
