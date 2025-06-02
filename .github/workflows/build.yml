@@ -44,7 +44,7 @@ on:
       local_version:
         required: false
         type: string
-      optimizer-level:
+      optimizer_level:
         required: true
         type: string
         
@@ -238,7 +238,7 @@ jobs:
       - name: Build kernel
         run: |
          cd kernel_workspace/kernel_platform
-         tools/bazel run --config=fast --config=stamp --lto=thin --copt=-O3 --jobs=$(nproc) --compilation_mode=opt --strip=always --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
+         tools/bazel run --config=fast --config=stamp --lto=thin --copt=-O${{ inputs.optimizer_level }} --jobs=$(nproc) --compilation_mode=opt --strip=always --linkopt=-fuse-ld=lld //common:kernel_aarch64_dist -- --dist_dir=dist
 
       - name: Generate Kernel lmages
         run: |
@@ -261,7 +261,7 @@ jobs:
       - name: Zip
         run: |
           cd kernel_workspace/kernel_platform/dist/AnyKernel3-kpm
-          zip -r ../AnyKernel3_${{inputs.FEIL }}_${{ env.KSUVER }}_kpm.zip ./*
+          zip -r ../AnyKernel3_${{ inputs.FEIL }}_${{ env.KSUVER }}_O${{ inputs.optimizer_level }}_kpm.zip ./*
                          
       - name: Upload AnyKernel3 (KPM)
         uses: actions/upload-artifact@v4
