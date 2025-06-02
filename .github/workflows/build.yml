@@ -257,5 +257,5 @@ jobs:
       - name: Upload AnyKernel3 (KPM)
         uses: actions/upload-artifact@v4
         with:
-         name: AnyKernel3_oneplus_ace5pro_${{ env.KSUVER }}_kpm
+         name: AnyKernel3_${{ inputs.FEIL }}_${{ env.KSUVER }}_O${{ inputs.optimizer_level }}_kpm
          path: kernel_workspace/kernel_platform/dist/AnyKernel3_${{ inputs.FEIL }}_${{ env.KSUVER }}_O${{ inputs.optimizer_level }}_kpm.zip
