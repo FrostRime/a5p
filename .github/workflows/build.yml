@@ -71,14 +71,22 @@ jobs:
          chmod a+x ~/repo
          sudo mv ~/repo /usr/local/bin/repo
 
+      - name: Cache repo workspace
+        uses: actions/cache@v4
+        id: cache-repo
+        with:
+          path: kernel_workspace
+          key: repo-${{ inputs.CPU }}-${{ inputs.FEIL }}-${{ inputs.ANDROID_VERSION }}-${{ inputs.KERNEL_VERSION }}
+
       - name: Initialize repo and sync
+        if: steps.cache-repo.outputs.cache-hit != 'true'
         run: |
-         mkdir kernel_workspace && cd kernel_workspace
+         mkdir -p kernel_workspace && cd kernel_workspace
          repo init -u https://github.com/OnePlusOSS/kernel_manifest.git -b refs/heads/oneplus/${{ inputs.CPU }} -m ${{ inputs.FEIL }}.xml --depth=1
          repo --trace sync -c -j$(nproc --all) --no-tags
          rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
          rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
-      
+         
       - name: SukiSU-Ultra & SukiSU version
         if: ${{ inputs.kernelsu_variant == 'SukiSU-Ultra' || inputs.kernelsu_variant == 'SukiSU' }}
         run: |
