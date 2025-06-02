@@ -254,9 +254,14 @@ jobs:
          rm -rf AnyKernel3-kpm/.git
          rm -f AnyKernel3-kpm/push.sh
          cp Image AnyKernel3-kpm/
+
+      - name: Zip
+        run: |
+          cd kernel_workspace/kernel_platform/dist
+          zip -r AnyKernel3_oneplus_ace5pro_${{ env.KSUVER }}_kpm.zip ./AnyKernel3-kpm
                          
       - name: Upload AnyKernel3 (KPM)
         uses: actions/upload-artifact@v4
         with:
          name: AnyKernel3_oneplus_ace5pro_${{ env.KSUVER }}_kpm
-         path: kernel_workspace/kernel_platform/dist/AnyKernel3-kpm/*
+         path: kernel_workspace/kernel_platform/dist/AnyKernel3_oneplus_ace5pro_${{ env.KSUVER }}_kpm.zip
