@@ -7,7 +7,7 @@ on:
 
 jobs:  
   generate-timestamp:
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latest
     outputs:
       timestamp: ${{ steps.set-time.outputs.timestamp }}
     steps:
