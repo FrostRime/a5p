@@ -2,8 +2,21 @@ name: Build All(主工作流)
 
 on:
   workflow_dispatch:
-
+  
+  generate-timestamp:
+    runs-on: ubuntu-latest
+    outputs:
+      timestamp: ${{ steps.set-time.outputs.timestamp }}
+    steps:
+      - name: Generate precise timestamp (Shanghai Time)
+        id: set-time
+        run: |
+          TIMESTAMP=$(TZ='Asia/Shanghai' date +"%Y%m%d-%H%M%S")
+          echo "timestamp=${TIMESTAMP}" >> $GITHUB_OUTPUT
+          echo "Generated Shanghai timestamp: ${TIMESTAMP}"
 jobs:
   build:
     uses: ./.github/workflows/build.yml
     secrets: inherit
+    with:
+      release_tag: ${{ needs.generate-timestamp.outputs.timestamp }}
