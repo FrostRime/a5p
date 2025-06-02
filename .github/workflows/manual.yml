@@ -21,7 +21,7 @@ jobs:
     secrets: inherit
     with:
       FEIL: "oneplus_ace5_pro"
-      optimizer-level: "3"
+      optimizer_level: "3"
       
  # ============== 新增聚合 Release 的作业 ============== #
   create-unified-release:
