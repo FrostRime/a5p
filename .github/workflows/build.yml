@@ -258,7 +258,7 @@ jobs:
       - name: Zip
         run: |
           cd kernel_workspace/kernel_platform/dist
-          zip -r AnyKernel3_oneplus_ace5pro_${{ env.KSUVER }}_kpm.zip ./AnyKernel3-kpm
+          zip -r AnyKernel3_oneplus_ace5pro_${{ env.KSUVER }}_kpm.zip ./AnyKernel3-kpm/*
                          
       - name: Upload AnyKernel3 (KPM)
         uses: actions/upload-artifact@v4
