@@ -50,7 +50,7 @@ on:
         
 jobs:
   build:
-    runs-on: blacksmith-4vcpu-ubuntu-2404
+    runs-on: ubuntu-latlest
     
     steps:
       - name: Maximize build space
