@@ -19,6 +19,9 @@ jobs:
   build:
     uses: ./.github/workflows/build.yml
     secrets: inherit
+    with:
+      FEIL: "oneplus_ace5_pro"
+      optimizer-level: "3"
       
  # ============== 新增聚合 Release 的作业 ============== #
   create-unified-release:
