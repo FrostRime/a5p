@@ -50,7 +50,7 @@ on:
         
 jobs:
   build:
-    runs-on: ubuntu-latlest
+    runs-on: ubuntu-latest
     
     steps:
       - name: Maximize build space
