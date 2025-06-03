@@ -17,10 +17,18 @@ jobs:
           TIMESTAMP=$(TZ='Asia/Shanghai' date +"%Y%m%d-%H%M%S")
           echo "timestamp=${TIMESTAMP}" >> $GITHUB_OUTPUT
           echo "Generated Shanghai timestamp: ${TIMESTAMP}"
-          
+  
   build:
+    strategy:
+      matrix:
+        FEIL: [ "oneplus_ace5_pro", "oneplus_13", "oneplus_13t" ]
+        optimizer_level: [ "0", "1", "2", "s", "3", "fast" ]
     uses: ./.github/workflows/build.yml
     secrets: inherit
+    with:
+      FEIL: ${{ matrix.FEIL }}
+      optimizer_level: ${{ matrix.optimizer_level }}
+      
       
  # ============== 新增聚合 Release 的作业 ============== #
   create-unified-release:
